@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">QuizMe</string>
+    <string-array name="questions">
+
+        <item>Java is an Object oriented language?</item>
+        <item>Numpy is a data manipulation library in Python.</item>
+        <item>In JavaScript "==" and "===" mean the same.</item>
+        <item>MS Word is a hardware.</item>
+        <item>CPU controls only input data of computer.</item>
+        <item>CPU stands for Central Performance Unit.</item>
+        <item>Freeware is software that is available for use at no monetary cost.</item>
+        <item>IPv6 Internet Protocol address is represented as eight groups of four Octal digits.</item>
+        <item>The hexadecimal number system contains digits from 1 - 15.</item>
+        <item>Octal number system contains digits from 0 - 7.</item>
+        <item>The Language that the computer can understand is called Machine Language.</item>
+        <item>Magnetic Tape used random access method.</item>
+        <item>Twitter is an online social networking and blogging service.</item>
+        <item>Worms and trojan horses are easily detected and eliminated by antivirus software.</item>
+        <item>Dot-matrix, Deskjet, Inkjet and Laser are all types of Printers.</item>
+        <item>GNU / Linux is a open source operating system.</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
