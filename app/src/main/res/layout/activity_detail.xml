@@ -5,5 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
+    <fragment
+        android:name="com.example.sneha.quizme.DetailFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment"
+        tools:layout="@layout/fragment_detail"/>
 
 </android.support.constraint.ConstraintLayout>
