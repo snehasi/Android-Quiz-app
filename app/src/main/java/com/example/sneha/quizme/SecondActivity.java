@@ -21,11 +21,11 @@ public class SecondActivity extends AppCompatActivity {
     private MyAdapter ad;
     private Context c;
     //change list here
+    private myDatabaseHelper databaseHelper;
 
     SQLiteOpenHelper oh;
     SQLiteDatabase db;
     Cursor cursor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,13 @@ public class SecondActivity extends AppCompatActivity {
         recycler_view=findViewById(R.id.recycler_view);
         layoutmanager = new LinearLayoutManager(this);
         recycler_view.setLayoutManager(layoutmanager);
-        ll= Arrays.asList(getResources().getStringArray(R.array.questions)); //chang
+
+        databaseHelper  = new myDatabaseHelper(this);
+        //databaseHelper.open();
+        ll=databaseHelper.getquestion(); //should return a List<String>
+
+
+        //ll= Arrays.asList(getResources().getStringArray(R.array.questions)); //chang
         ad=new MyAdapter(ll,this);
         //recycler_view.setHasFixedSize(true);
         recycler_view.setAdapter(ad);

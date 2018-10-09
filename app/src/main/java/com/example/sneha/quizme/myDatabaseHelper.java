@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class myDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME="questions.db";
     public static final String TABLE_QUES="question";
@@ -52,21 +55,36 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public String[] getquestion() {
+    public ArrayList<String> getquestion() {
 
         final String TABLE_NAME = "question";
 
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
-        SQLiteDatabase db  = this.getReadableDatabase();
-        Cursor cursor      = db.rawQuery(selectQuery, null);
-        String[] data      = null;
 
-        if (cursor.moveToFirst()) {
-            do {
-                // get the data into array, or class variable
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return data;
+        ArrayList<String> ar = new ArrayList<String>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+
+
+            String selectQuery = "SELECT  * FROM " + TABLE_NAME; //need to change and iterate
+
+
+
+            Cursor cursor = db.query(TABLE_NAME,new String[]{"ques"},null,null,null,null,null);
+            String ad=null;
+
+            if (cursor.moveToFirst()) {
+                do {
+                    ad=cursor.getString(0);
+                    ar.add(ad);
+                    // get the data into array, or class variable
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+
+        return ar;
     }
+
+
+
 }

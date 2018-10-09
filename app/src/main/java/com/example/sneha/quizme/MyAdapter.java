@@ -17,6 +17,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.myviewholder>{
 
     private List<String> ll;
     private Context c;
+    private myDatabaseHelper databaseHelper;
+
 
 
     public MyAdapter(List<String> ll, Context c){
@@ -65,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.myviewholder>{
         @Override
         public void onClick(View v) {
             //myDatabaseHelper.openDataBas
-            //myDatabaseHelper data  = new myDatabaseHelper(MyAdapter.this);
+
 
             Intent intent = new Intent(c, DetailActivity.class);
             //String[] arr = ll.toArray(new String[0]);
