@@ -1,10 +1,13 @@
 package com.example.sneha.quizme;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class myDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME="questions.db";
     public static final String TABLE_QUES="question";
     public static final String TABLE_ANS="savedanswer";
@@ -17,15 +20,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_ANS_1="ID";
     public static final String COL_ANS_2="ans";
 
+    private final Context context;
 
-    public DatabaseHelper(Context context) {
+
+    public myDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " +TABLE_QUES+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT, ques TEXT)");
         db.execSQL("CREATE TABLE " +TABLE_ANS+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT, ans TEXT)");
+
+        ContentValues val = new ContentValues();
+        Resources r = context.getResources();
+        String[] tbr = r.getStringArray(R.array.questions);
+        int l = tbr.length;
+        for(int j=0;j<l;j++){
+            val.put("ques", tbr[j]);
+            db.insert(TABLE_QUES,null,val);
+        }
 
     }
 
@@ -35,5 +50,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUES);
         onCreate(db);
 
+    }
+
+    public String[] getquestion() {
+
+        final String TABLE_NAME = "question";
+
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+        SQLiteDatabase db  = this.getReadableDatabase();
+        Cursor cursor      = db.rawQuery(selectQuery, null);
+        String[] data      = null;
+
+        if (cursor.moveToFirst()) {
+            do {
+                // get the data into array, or class variable
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return data;
     }
 }
