@@ -55,6 +55,8 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+
     public ArrayList<String> getquestion() {
 
         final String TABLE_NAME = "question";

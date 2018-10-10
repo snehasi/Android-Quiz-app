@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 
 public class DetailFragment extends Fragment {
@@ -25,15 +28,20 @@ public class DetailFragment extends Fragment {
 
     //changed
     private myDatabaseHelper databaseHelper;
+    private MyAdapter myadap;
     SQLiteOpenHelper oh;
     SQLiteDatabase db;
     Cursor cursor;
     private List<String> ll;
+    public int position;
     private MyAdapter ad;
     private Context c;
     private TextView textview;
     private LayoutInflater inflater;
     private ViewGroup container;
+    private View vvv;
+    //accessing inner class from another class
+
 
 
     // TODO: Rename and change types of parameters
@@ -89,10 +97,28 @@ public class DetailFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_detail, container, false);
         TextView tv=v.findViewById(R.id.fragment_header);
         databaseHelper  = new myDatabaseHelper(this.getActivity());
+        myadap = new MyAdapter(ll,this.getActivity());
         ll=databaseHelper.getquestion();
-        String text = ll.get(0);
-        tv.setText(text);
+
+
+        //position = getArguments().getInt("position");
+
+        DetailActivity my=(DetailActivity) getActivity();
+        position = my.getst();
+        Log.d(TAG, "checkMe " + position); //Notworking
+
+        //int it = myadap.itemid();
+        //MyAdapter.myviewholder jk = new MyAdapter.myviewholder(tv,c,ll);
+//        int it =jk.position;
+
+        //int it=myadap.x;
+
+        //String h=Integer.toString(position);
+        //Log.d(h, "check");
+        String tex = ll.get(position);
+        tv.setText(tex);
         return v;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
