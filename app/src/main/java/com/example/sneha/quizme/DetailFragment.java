@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,6 +29,10 @@ public class DetailFragment extends Fragment {
 
     //changed
     private myDatabaseHelper databaseHelper;
+
+    //buttons
+    Button tb,fb,sb,subb;
+
     private MyAdapter myadap;
     SQLiteOpenHelper oh;
     SQLiteDatabase db;
@@ -40,6 +45,7 @@ public class DetailFragment extends Fragment {
     private LayoutInflater inflater;
     private ViewGroup container;
     private View vvv;
+    public boolean xt;
     //accessing inner class from another class
 
 
@@ -73,6 +79,7 @@ public class DetailFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
         //changed then left
         //setContentView(R.layout.activity_second);
         //View v = onCreateView(inflater, container, savedInstanceState);
@@ -101,25 +108,73 @@ public class DetailFragment extends Fragment {
         ll=databaseHelper.getquestion();
 
 
-        //position = getArguments().getInt("position");
-
         DetailActivity my=(DetailActivity) getActivity();
         position = my.getst();
         Log.d(TAG, "checkMe " + position); //Notworking
 
-        //int it = myadap.itemid();
-        //MyAdapter.myviewholder jk = new MyAdapter.myviewholder(tv,c,ll);
-//        int it =jk.position;
 
-        //int it=myadap.x;
-
-        //String h=Integer.toString(position);
-        //Log.d(h, "check");
         String tex = ll.get(position);
         tv.setText(tex);
+
+        tb=(Button) v.findViewById(R.id.truebutton);
+        fb=(Button) v.findViewById(R.id.falsebutton);
+        sb=(Button) v.findViewById(R.id.savebutton);
+        subb=(Button) v.findViewById(R.id.submitbutton);
+        checktrue();
+        checkfalse();
+        AddData();
+
         return v;
 
     }
+
+
+    public boolean checktrue() {
+        //boolean x;
+        tb.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        xt= true;
+
+                    }
+                }
+        );
+        return xt;
+    }
+
+    public boolean checkfalse() {
+        //boolean x;
+        tb.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        xt= false;
+
+                    }
+                }
+        );
+        return xt;
+    }
+
+
+    public void AddData() {
+        sb.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        if(xt==true){
+                            databaseHelper.insertd("True");
+                        }
+                        if(xt==false){
+                            databaseHelper.insertd("False");
+                        }
+
+                    }
+                }
+        );
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

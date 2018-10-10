@@ -55,6 +55,21 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean insertd(String choice) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("ans",choice);
+        long result = db.insert(TABLE_ANS,null,cv);
+        if(result ==-1){
+            return false;
+        }
+        else{
+            return true;
+        }
+
+
+    }
+
 
 
     public ArrayList<String> getquestion() {
