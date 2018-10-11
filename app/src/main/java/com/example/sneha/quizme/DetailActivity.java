@@ -129,6 +129,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
             file.createNewFile(); //error here
+            //file.setDestinationInExternalFilesDir(this, getFilesDir().toString(), "song_15.mp3");
             Log.d("checklocation", file.getAbsolutePath());
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
             SQLiteDatabase db = dbh.getReadableDatabase();
@@ -145,7 +146,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         }
         catch(Exception sqlEx)
         {
-            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+            Log.e("uh", sqlEx.getMessage(), sqlEx);
         }
     }
 
