@@ -1,9 +1,13 @@
 package com.example.sneha.quizme;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -107,17 +111,24 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     public void dbtocsv()
     {
         myDatabaseHelper dbh = new myDatabaseHelper(this);
-        File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "");
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
         Log.d("checklocation", exportDir.getPath());
         if (!exportDir.exists())
         {
             exportDir.mkdirs();
         }
 
-        File file = new File(exportDir, "csvname.csv");
+        File file = new File(exportDir, "dbb.csv");
         try
-        {
-            file.createNewFile();
+        {   //file.mkdirs();
+            int writeExternalStoragePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+// If do not grant write external storage permission.
+            if(writeExternalStoragePermission!= PackageManager.PERMISSION_GRANTED)
+            {
+                // Request user to grant write external storage permission.
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+            file.createNewFile(); //error here
             Log.d("checklocation", file.getAbsolutePath());
             CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
             SQLiteDatabase db = dbh.getReadableDatabase();
