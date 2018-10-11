@@ -5,23 +5,48 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.util.EntityUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.HttpCookie;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 import static com.example.sneha.quizme.myDatabaseHelper.DATABASE_NAME;
 import static com.example.sneha.quizme.myDatabaseHelper.TABLE_ANS;
 import static com.example.sneha.quizme.myDatabaseHelper.TABLE_QUES;
+
 
 //third screen has been connected
 public class DetailActivity extends AppCompatActivity implements DetailFragment.OnFragmentInteractionListener {
@@ -31,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     public int position = 0;
     public myDatabaseHelper databaseHelper;
     public boolean xt;
+    private static final String SERVER_ADDR="http://192.168.32.189:8000/";
 
 
 
@@ -109,9 +135,11 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         //boolean x;
         Toast.makeText(this, "submit", Toast.LENGTH_SHORT).show();
         dbtocsv();
+        File f = dbtocsv();
+        new uploadfile(f,"dbb.csv").executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void dbtocsv()
+    public File dbtocsv()
     {
         myDatabaseHelper dbh = new myDatabaseHelper(this);
         File exportDir = new File(Environment.getExternalStorageDirectory(), "");
@@ -183,6 +211,57 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         catch(Exception sqlEx)
         {
             Log.e("uh", sqlEx.getMessage(), sqlEx);
+        }
+        return file;
+    }
+
+    private class uploadfile extends AsyncTask<Void, Void, Void>{
+        File file;
+        String name;
+
+        public uploadfile(File file, String name){
+            this.file=file;
+            this.name=name;
+
+        }
+        
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Log.e("AsyncTask", "gah gah guh guh");
+
+                HttpClient cli = new DefaultHttpClient();
+
+
+                HttpPost t = new HttpPost(SERVER_ADDR + "upload.php");
+                FileBody fb = new FileBody(file);
+                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                reqEntity.addPart("fileToUpload", fb);
+                t.setEntity(reqEntity);
+
+                HttpResponse response = cli.execute(t);
+                HttpEntity resEntity = response.getEntity();
+
+                if (resEntity != null) {
+
+                    String responseStr = EntityUtils.toString(resEntity).trim();
+                    Log.v(TAG, "Response: " + responseStr);
+
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void voi){
+            super.onPostExecute(voi);
+//            Toast.makeText(getApplicationContext(),"File Uploaded", Toast.LENGTH_SHORT).show();
         }
     }
 
