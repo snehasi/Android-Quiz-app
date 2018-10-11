@@ -56,7 +56,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     public int position = 0;
     public myDatabaseHelper databaseHelper;
     public boolean xt;
-    private static final String SERVER_ADDR="http://192.168.32.189:8000/";
+    private static final String SERVER_ADDR="http://192.168.53.215:8000/";
 
 
 
