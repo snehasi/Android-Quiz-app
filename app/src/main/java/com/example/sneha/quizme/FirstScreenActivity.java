@@ -3,6 +3,7 @@ package com.example.sneha.quizme;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -20,4 +21,6 @@ public class FirstScreenActivity extends AppCompatActivity {
         startActivity(tt);
 
     }
+
+
 }
