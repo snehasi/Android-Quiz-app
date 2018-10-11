@@ -14,6 +14,7 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME="questions.db";
     public static final String TABLE_QUES="question";
     public static final String TABLE_ANS="savedanswer";
+    private static final int DATABASE_VERSION = 2;
 
     //col for q
     public static final String COL_QUES_1="ID";
@@ -27,14 +28,14 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
 
 
     public myDatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " +TABLE_QUES+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT, ques TEXT)");
-        db.execSQL("CREATE TABLE " +TABLE_ANS+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT, ans TEXT)");
+        db.execSQL("CREATE TABLE " +TABLE_QUES+ "(ID INTEGER PRIMARY KEY ON CONFLICT REPLACE , ques TEXT)");
+        db.execSQL("CREATE TABLE " +TABLE_ANS+ "(ID INTEGER PRIMARY KEY ON CONFLICT REPLACE , ans TEXT)");
 
         ContentValues val = new ContentValues();
         Resources r = context.getResources();
@@ -55,17 +56,15 @@ public class myDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertd(String choice) {
+    public void insertd(int pos, String choice) {
+        //DetailActivity da = new DetailActivity();
+        //int x=da.getst();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put("ID", pos);
         cv.put("ans",choice);
-        long result = db.insert(TABLE_ANS,null,cv);
-        if(result ==-1){
-            return false;
-        }
-        else{
-            return true;
-        }
+        db.insert(TABLE_ANS,null,cv);
+
 
 
     }
