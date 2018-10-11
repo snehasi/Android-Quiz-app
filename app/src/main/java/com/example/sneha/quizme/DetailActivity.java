@@ -1,11 +1,14 @@
 package com.example.sneha.quizme;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.Settings;
@@ -218,6 +221,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     private class uploadfile extends AsyncTask<Void, Void, Void>{
         File file;
         String name;
+        String message;
 
         public uploadfile(File file, String name){
             this.file=file;
@@ -227,30 +231,48 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
         
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                Log.e("AsyncTask", "gah gah guh guh");
+            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
 
-                HttpClient cli = new DefaultHttpClient();
+                Log.i("CheckNetwork", "Network is Connected.");
+
+                try {
+                    Log.i("UploadProgress", "File is Being Uploaded.");
+
+                    HttpClient cli = new DefaultHttpClient();
 
 
-                HttpPost t = new HttpPost(SERVER_ADDR + "upload.php");
-                FileBody fb = new FileBody(file);
-                MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-                reqEntity.addPart("fileToUpload", fb);
-                t.setEntity(reqEntity);
+                    HttpPost t = new HttpPost(SERVER_ADDR + "upload.php");
+                    FileBody fb = new FileBody(file);
+                    MultipartEntity reqEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+                    reqEntity.addPart("fileToUpload", fb);
+                    t.setEntity(reqEntity);
 
-                HttpResponse response = cli.execute(t);
-                HttpEntity resEntity = response.getEntity();
+                    HttpResponse response = cli.execute(t);
+                    HttpEntity resEntity = response.getEntity();
 
-                if (resEntity != null) {
+                    if (resEntity != null) {
 
-                    String responseStr = EntityUtils.toString(resEntity).trim();
-                    Log.v(TAG, "Response: " + responseStr);
+                        String responseStr = EntityUtils.toString(resEntity).trim();
+                        Log.v(TAG, "Response: " + responseStr);
+                        Log.i("UploadProgress", "File is Now Uploaded.");
 
+
+
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
-            }catch(Exception e){
-                e.printStackTrace();
+
+
+            } else {
+                Log.i("CheckNetwork", "Network is Not Connected.");
+
+
             }
+
+
 
 
 
